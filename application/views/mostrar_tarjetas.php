@@ -3,54 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Tarjetas de Cronómetros/Temporizadores</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-            margin: 10px;
-            display: inline-block;
-            width: 200px;
-            text-align: center;
-            position: relative;
-        }
-        .delete-button, .edit-button {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: red;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .edit-button {
-            right: 35px;
-            background-color: blue;
-        }
-        .add-button {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: green;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .cards-container {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .card input[type="text"] {
-            width: 80%;
-            margin-bottom: 10px;
-        }
-        .message {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-    </style>
-    <!-- Incluir jQuery desde CDN -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- Css -->
+    <link rel="stylesheet" href="<?php echo base_url('styles/styles.css'); ?>">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="<?php echo base_url('styles/bootstrap.css'); ?>">
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="<?php echo base_url('styles/jquery-3.3.1.min.js'); ?>"></script>
+
 </head>
 <body class="container">
 
@@ -91,7 +52,7 @@
                     <div class="card" data-index="">
                         <button class="delete-button">X</button>
                         <button class="edit-button">✎</button>
-                        <input type="text" name="tarjetas[][nombre]" value="Equipo" disabled />
+                        <input type="text" name="tarjetas[][nombre]" value="Tarjeta Nueva" disabled />
                         <label for="tipo">Tipo:</label>
                         <select name="tarjetas[][tipo]" class="tipo-select">
                             <option value="cronometro">Cronómetro</option>
