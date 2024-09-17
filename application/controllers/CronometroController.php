@@ -37,42 +37,4 @@ class CronometroController extends CI_Controller {
             $this->load->view('mostrar_tarjetas', $data);
         }
     }
-
-    public function agregarTarjeta() {
-        $tarjetas = $this->input->post('tarjetas');
-        $username = $this->input->post('username');
-
-        if (!is_array($tarjetas)) {
-            $tarjetas = array();
-        }
-
-        // Agregar una nueva tarjeta
-        $tarjetas[] = array('tipo' => 'cronometro', 'nombre' => 'Nueva Tarjeta');
-
-        $data = array(
-            'username' => $username,
-            'tarjetas' => $tarjetas
-        );
-
-        $this->load->view('mostrar_tarjetas', $data);
-    }
-
-    public function eliminarTarjeta($index) {
-        $tarjetas = $this->input->post('tarjetas');
-        $username = $this->input->post('username');
-
-        if (is_array($tarjetas)) {
-            unset($tarjetas[$index]);
-            $tarjetas = array_values($tarjetas);  // Reindexar array
-        } else {
-            $tarjetas = array();  // Si no hay tarjetas, creamos un array vacío
-        }
-
-        $data = array(
-            'username' => $username,
-            'tarjetas' => $tarjetas
-        );
-
-        $this->load->view('mostrar_tarjetas', $data);
-    }
 }

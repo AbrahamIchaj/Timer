@@ -56,5 +56,3 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['default_controller'] = 'CronometroController';
 $route['cronometro/procesarFormulario'] = 'CronometroController/procesarFormulario';
-$route['cronometro/agregarTarjeta'] = 'CronometroController/agregarTarjeta';
-$route['cronometro/eliminarTarjeta/(:any)'] = 'CronometroController/eliminarTarjeta/$1';

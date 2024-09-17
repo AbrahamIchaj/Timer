@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Tarjetas de Cronómetros/Temporizadores</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         .card {
             border: 1px solid #ccc;
@@ -36,17 +37,19 @@
             flex-wrap: wrap;
         }
     </style>
+    <!-- Incluir jQuery desde CDN -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
-<body>
+<body class="container">
 
     <h1>Bienvenido, <?php echo $username; ?>!</h1>
-    <h2>Cantidad de tarjetas: <?php echo count($tarjetas); ?></h2>
+    <h2>Cantidad de tarjetas: <span id="cantidad-tarjetas"><?php echo count($tarjetas); ?></span></h2>
 
-    <div class="cards-container">
+    <div class="cards-container" id="cards-container">
         <?php foreach ($tarjetas as $index => $tarjeta): ?>
-            <div class="card">
+            <div class="card" data-index="<?php echo $index; ?>">
                 <!-- Botón de eliminar tarjeta -->
-                <button class="delete-button" onclick="eliminarTarjeta(<?php echo $index; ?>)">X</button>
+                <button class="delete-button">X</button>
                 <h3><?php echo $tarjeta['nombre']; ?></h3>
 
                 <!-- Combobox para elegir el tipo (cronómetro o temporizador) -->
@@ -59,36 +62,38 @@
         <?php endforeach; ?>
     </div>
 
-    <h3>Tarjetas disponibles: <?php echo count($tarjetas); ?></h3>
-    <button class="add-button" onclick="agregarTarjeta()">+ Agregar tarjeta</button>
-
-    <form id="form-eliminar" method="POST" action="<?php echo base_url('CronometroController/eliminarTarjeta'); ?>">
-    <input type="hidden" name="username" value="<?php echo $username; ?>">
-    <input type="hidden" id="index-eliminar" name="index" value="">
-    <?php foreach ($tarjetas as $index => $tarjeta): ?>
-        <input type="hidden" name="tarjetas[<?php echo $index; ?>][tipo]" value="<?php echo $tarjeta['tipo']; ?>">
-    <?php endforeach; ?>
-</form>
-
-<form id="form-agregar" method="POST" action="<?php echo base_url('CronometroController/agregarTarjeta'); ?>">
-    <input type="hidden" name="username" value="<?php echo $username; ?>">
-    <?php foreach ($tarjetas as $index => $tarjeta): ?>
-        <input type="hidden" name="tarjetas[<?php echo $index; ?>][tipo]" value="<?php echo $tarjeta['tipo']; ?>">
-    <?php endforeach; ?>
-</form>
-
+    <button class="add-button" id="add-button">+ Agregar tarjeta</button>
 
     <script>
-        function eliminarTarjeta(index) {
-            // Asignar el índice al input hidden y enviar el formulario
-            document.getElementById('index-eliminar').value = index;
-            document.getElementById('form-eliminar').submit();
-        }
+        $(document).ready(function() {
+            // Eliminar tarjeta
+            $(document).on('click', '.delete-button', function() {
+                $(this).closest('.card').remove();
+                actualizarCantidadTarjetas();
+            });
 
-        function agregarTarjeta() {
-            // Enviar el formulario para agregar tarjeta
-            document.getElementById('form-agregar').submit();
-        }
+            // Agregar nueva tarjeta
+            $('#add-button').click(function() {
+                var nuevaTarjeta = `
+                    <div class="card" data-index="">
+                        <button class="delete-button">X</button>
+                        <h3>Nueva Tarjeta</h3>
+                        <label for="tipo">Tipo:</label>
+                        <select name="tarjetas[][tipo]">
+                            <option value="cronometro">Cronómetro</option>
+                            <option value="temporizador">Temporizador</option>
+                        </select>
+                    </div>`;
+                $('#cards-container').append(nuevaTarjeta);
+                actualizarCantidadTarjetas();
+            });
+
+            // Actualizar la cantidad de tarjetas
+            function actualizarCantidadTarjetas() {
+                var cantidad = $('.card').length;
+                $('#cantidad-tarjetas').text(cantidad);
+            }
+        });
     </script>
 
 </body>
