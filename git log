@@ -1,0 +1,41 @@
+[33mcommit 59e9edc719017bef68b2650beea4a79cbe68ff14[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Abraham <abrahamichaj95@gmail.com>
+Date:   Tue Sep 17 15:51:57 2024 -0600
+
+    Se agrego el cronometro y temporizador para que aparezca en la tarjeta, se realizo la funcion de iniciar, pausar y detener
+
+[33mcommit 245fadf92520cd3ef3a23322920940f3fd504d92[m
+Author: Abraham <abrahamichaj95@gmail.com>
+Date:   Tue Sep 17 14:45:00 2024 -0600
+
+    Se agrego la carpeta styles que contiene todos los styles y jquery del proyecto con las referencias correspondientes de mostrar_tarjetas.php
+
+[33mcommit 8122a4b5e387d730c67f400b6993d737dc8dc826[m
+Author: Abraham <abrahamichaj95@gmail.com>
+Date:   Tue Sep 17 14:18:05 2024 -0600
+
+    Se modifico el codigo css de algunos controles, se agrego el icono de editar y eliminar tarjetas, se agrego una condición de prueba en el combobox
+
+[33mcommit bca42c64bc3760ab6f841999daa35e1e07a69f57[m
+Author: Abraham <abrahamichaj95@gmail.com>
+Date:   Tue Sep 17 13:00:47 2024 -0600
+
+    Se corrigieron errores al momento de eliminar la tarjeta y de agregar una nueva
+
+[33mcommit 431f78dec249b35a81f95468d258601d5f0f0527[m
+Author: Abraham <abrahamichaj95@gmail.com>
+Date:   Tue Sep 17 11:55:21 2024 -0600
+
+    Se agrego el formulario de inicio y el formulario en donde se mostrara las tarjetas dependiendo de la cantidad ingresada
+
+[33mcommit b7b4b449307e65bc4f79a1eaf57f9531c32a492d[m
+Author: Abraham <abrahamichaj95@gmail.com>
+Date:   Thu Sep 12 16:31:56 2024 -0600
+
+    Configuracion de controller
+
+[33mcommit f47f97eb2ca2034ab75b3b99b9af906f77e8658c[m
+Author: Abraham <abrahamichaj95@gmail.com>
+Date:   Thu Sep 12 16:18:51 2024 -0600
+
+    Configuración del proyecto

@@ -59,3 +59,17 @@
         .time-inputs {
             display: none;
         }
+
+        .time-display {
+            font-size: 30px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        button {
+            margin: 5px;
+        }
+        .time-inputs {
+            display: none;
+        }
+
+        

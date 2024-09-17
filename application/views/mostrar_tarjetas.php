@@ -3,75 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Tarjetas de Cronómetros/Temporizadores</title>
-    <!-- Css -->
-    <link rel="stylesheet" href="<?php echo base_url('styles/styles.css'); ?>">
 
-    <!-- Bootstrap -->
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?php echo base_url('styles/bootstrap.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('styles/styles.css'); ?>">
 
     <!-- jQuery -->
     <script type="text/javascript" src="<?php echo base_url('styles/jquery-3.3.1.min.js'); ?>"></script>
 
-    <style>
-        .card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .time-display {
-            font-size: 30px;
-            margin: 10px 0;
-            font-weight: bold;
-        }
-        button {
-            margin: 5px;
-        }
-        .time-inputs {
-            display: none;
-        }
-    </style>
+    <!-- Custom Styles -->
 </head>
-<body class="container">
+<body class="container mt-5">
 
-    <h1>Bienvenido, <?php echo $username; ?>!</h1>
-    <button class="add-button" id="add-button">+ Agregar tarjeta</button>
-    <h2>Cantidad de tarjetas: <span id="cantidad-tarjetas"><?php echo count($tarjetas); ?></span></h2>
+    <h1 class="text-center mb-4">Bienvenido, <?php echo $username; ?>!</h1>
 
-    <div class="cards-container" id="cards-container">
+    <div class="text-center">
+        <button class="btn btn-primary add-button" id="add-button">+ Agregar tarjeta</button>
+    </div>
+    <h2 class="text-center mt-4">Cantidad de tarjetas: <span id="cantidad-tarjetas"><?php echo count($tarjetas); ?></span></h2>
+
+    <div class="row" id="cards-container">
         <?php foreach ($tarjetas as $index => $tarjeta): ?>
-            <div class="card" data-index="<?php echo $index; ?>">
-                <!-- Botones de eliminar y editar tarjeta -->
-                <button class="delete-button">X</button>
-                <button class="edit-button">✎</button>
-                <input type="text" name="tarjetas[<?php echo $index; ?>][nombre]" value="<?php echo $tarjeta['nombre']; ?>" disabled />
-                
-                <label for="tipo">Tipo:</label>
-                <select name="tarjetas[<?php echo $index; ?>][tipo]" class="tipo-select">
-                    <option value="cronometro" <?php echo $tarjeta['tipo'] == 'cronometro' ? 'selected' : ''; ?>>Cronómetro</option>
-                    <option value="temporizador" <?php echo $tarjeta['tipo'] == 'temporizador' ? 'selected' : ''; ?>>Temporizador</option>
-                </select>
-                <div class="message"></div>
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-4" data-index="<?php echo $index; ?>">
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-danger btn-sm delete-button" title="Eliminar tarjeta">X</button>
+                        <button class="btn btn-info btn-sm edit-button" title="Editar tarjeta">✎</button>
+                    </div>
+                    
+                    <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[<?php echo $index; ?>][nombre]" value="<?php echo $tarjeta['nombre']; ?>" disabled />
 
-                <!-- Inputs de tiempo para temporizador -->
-                <div class="time-inputs">
-                    <input type="number" class="hours-input" placeholder="Horas" min="0" max="23">
-                    <input type="number" class="minutes-input" placeholder="Minutos" min="0" max="59">
-                    <input type="number" class="seconds-input" placeholder="Segundos" min="0" max="59">
+                    <div class="form-group">
+                        <label for="tipo">Tipo:</label>
+                        <select name="tarjetas[<?php echo $index; ?>][tipo]" class="form-control tipo-select">
+                            <option value="cronometro" <?php echo $tarjeta['tipo'] == 'cronometro' ? 'selected' : ''; ?>>Cronómetro</option>
+                            <option value="temporizador" <?php echo $tarjeta['tipo'] == 'temporizador' ? 'selected' : ''; ?>>Temporizador</option>
+                        </select>
+                    </div>
+
+                    <div class="time-inputs mt-3 mb-3" style="display: <?php echo $tarjeta['tipo'] == 'temporizador' ? 'block' : 'none'; ?>">
+                        <input type="number" class="form-control d-inline-block hours-input" placeholder="Horas" min="0" max="23">
+                        <input type="number" class="form-control d-inline-block minutes-input" placeholder="Minutos" min="0" max="59">
+                        <input type="number" class="form-control d-inline-block seconds-input" placeholder="Segundos" min="0" max="59">
+                    </div>
+
+                    <div class="time-display" id="display-<?php echo $index; ?>">00:00:00.000</div>
+
+                    <div class="text-center mt-3">
+                        <button class="btn btn-success start-btn" data-index="<?php echo $index; ?>">Iniciar</button>
+                        <button class="btn btn-warning reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button>
+                    </div>
                 </div>
-
-                <!-- Contenedor de tiempo -->
-                <div class="time-display" id="display-<?php echo $index; ?>">00:00:00.000</div>
-                
-                <!-- Botones de control -->
-                 <content>
-                <button class="start-btn" data-index="<?php echo $index; ?>">Iniciar</button>
-                <button class="reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button></content>
             </div>
         <?php endforeach; ?>
     </div>
-
-    
 
     <script>
         $(document).ready(function() {
@@ -79,7 +64,7 @@
             let intervals = {};
             let startTimes = {};
 
-            // Ocultar o mostrar los inputs según la selección de combobox
+            // Manejador de cambio de tipo (cronómetro o temporizador)
             $(document).on('change', '.tipo-select', function() {
                 var tipo = $(this).val();
                 var card = $(this).closest('.card');
@@ -96,13 +81,13 @@
                 let card = $(this).closest('.card');
                 let tipo = card.find('.tipo-select').val();
                 let display = card.find('.time-display');
-                
+
                 if (timers[index]) {
                     clearInterval(timers[index]);
                     timers[index] = null;
                     $(this).text('Iniciar');
                 } else {
-                    startTimes[index] = Date.now(); // Almacena el tiempo de inicio
+                    startTimes[index] = Date.now();
                     if (tipo === 'cronometro') {
                         startCronometro(index, display);
                     } else if (tipo === 'temporizador') {
@@ -112,7 +97,6 @@
                 }
             });
 
-            // Función para el cronómetro (contar hacia arriba)
             function startCronometro(index, display) {
                 let elapsed = intervals[index] || 0;
                 timers[index] = setInterval(function() {
@@ -122,7 +106,6 @@
                 }, 10);
             }
 
-            // Función para el temporizador (contar hacia abajo)
             function startTemporizador(index, display, card) {
                 let hours = parseInt(card.find('.hours-input').val()) || 0;
                 let minutes = parseInt(card.find('.minutes-input').val()) || 0;
@@ -143,7 +126,6 @@
                 }, 10);
             }
 
-            // Formatear el tiempo en horas, minutos, segundos y milisegundos
             function formatTime(s) {
                 const hours = Math.floor(s / 3600);
                 const minutes = Math.floor((s % 3600) / 60);
@@ -162,6 +144,19 @@
                 $('.start-btn[data-index="' + index + '"]').text('Iniciar');
             });
 
+            // Función para editar el nombre de la tarjeta
+            $(document).on('click', '.edit-button', function() {
+                var card = $(this).closest('.card');
+                var inputNombre = card.find('.tarjeta-nombre');
+                inputNombre.prop('disabled', !inputNombre.prop('disabled'));
+
+                if (inputNombre.prop('disabled')) {
+                    $(this).text('✎');  // Vuelve al modo edición
+                } else {
+                    $(this).text('✔');  // Guardar cambios
+                }
+            });
+
             // Eliminar tarjeta
             $(document).on('click', '.delete-button', function() {
                 $(this).closest('.card').remove();
@@ -171,32 +166,37 @@
             // Agregar nueva tarjeta
             $('#add-button').click(function() {
                 var nuevaTarjeta = `
-                    <div class="card" data-index="">
-                        <button class="delete-button">X</button>
-                        <button class="edit-button">✎</button>
-                        <input type="text" name="tarjetas[][nombre]" value="Tarjeta Nueva" disabled />
-                        <label for="tipo">Tipo:</label>
-                        <select name="tarjetas[][tipo]" class="tipo-select">
-                            <option value="cronometro">Cronómetro</option>
-                            <option value="temporizador">Temporizador</option>
-                        </select>
-                        <div class="message"></div>
-                        <div class="time-inputs">
-                            <input type="number" class="hours-input" placeholder="Horas" min="0" max="23">
-                            <input type="number" class="minutes-input" placeholder="Minutos" min="0" max="59">
-                            <input type="number" class="seconds-input" placeholder="Segundos" min="0" max="59">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm mb-4" data-index="">
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-danger btn-sm delete-button" title="Eliminar tarjeta">X</button>
+                                <button class="btn btn-info btn-sm edit-button" title="Editar tarjeta">✎</button>
+                            </div>
+                            <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[][nombre]" value="Tarjeta Nueva" disabled />
+                            <div class="form-group">
+                                <label for="tipo">Tipo:</label>
+                                <select name="tarjetas[][tipo]" class="form-control tipo-select">
+                                    <option value="cronometro">Cronómetro</option>
+                                    <option value="temporizador">Temporizador</option>
+                                </select>
+                            </div>
+                            <div class="time-inputs mt-3 mb-3" style="display:none;">
+                                <input type="number" class="form-control d-inline-block hours-input" placeholder="Horas" min="0" max="23">
+                                <input type="number" class="form-control d-inline-block minutes-input" placeholder="Minutos" min="0" max="59">
+                                <input type="number" class="form-control d-inline-block seconds-input" placeholder="Segundos
+                                </input>
+                            </div>
+                            <div class="time-display">00:00:00.000</div>
+                            <div class="text-center mt-3">
+                                <button class="btn btn-success start-btn" data-index="">Iniciar</button>
+                                <button class="btn btn-warning reset-btn" data-index="">Reiniciar</button>
+                            </div>
                         </div>
-                        <div class="time-display" id="display-new">00:00:00.000</div>
-            <content>
-                <button class="start-btn" data-index="<?php echo $index; ?>">Iniciar</button>
-                <button class="reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button>
-            </content>
                     </div>`;
                 $('#cards-container').append(nuevaTarjeta);
                 actualizarCantidadTarjetas();
             });
 
-            // Actualizar la cantidad de tarjetas
             function actualizarCantidadTarjetas() {
                 var cantidad = $('.card').length;
                 $('#cantidad-tarjetas').text(cantidad);
