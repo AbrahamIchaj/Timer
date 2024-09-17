@@ -15,7 +15,7 @@
             text-align: center;
             position: relative;
         }
-        .delete-button {
+        .delete-button, .edit-button {
             position: absolute;
             top: 5px;
             right: 5px;
@@ -23,6 +23,10 @@
             color: white;
             border: none;
             cursor: pointer;
+        }
+        .edit-button {
+            right: 35px;
+            background-color: blue;
         }
         .add-button {
             margin-top: 20px;
@@ -36,6 +40,14 @@
             display: flex;
             flex-wrap: wrap;
         }
+        .card input[type="text"] {
+            width: 80%;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin-top: 10px;
+            font-weight: bold;
+        }
     </style>
     <!-- Incluir jQuery desde CDN -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -48,16 +60,17 @@
     <div class="cards-container" id="cards-container">
         <?php foreach ($tarjetas as $index => $tarjeta): ?>
             <div class="card" data-index="<?php echo $index; ?>">
-                <!-- Botón de eliminar tarjeta -->
+                <!-- Botones de eliminar y editar tarjeta -->
                 <button class="delete-button">X</button>
-                <h3><?php echo $tarjeta['nombre']; ?></h3>
-
-                <!-- Combobox para elegir el tipo (cronómetro o temporizador) -->
+                <button class="edit-button">✎</button>
+                <input type="text" name="tarjetas[<?php echo $index; ?>][nombre]" value="<?php echo $tarjeta['nombre']; ?>" disabled />
+                
                 <label for="tipo">Tipo:</label>
-                <select name="tarjetas[<?php echo $index; ?>][tipo]">
+                <select name="tarjetas[<?php echo $index; ?>][tipo]" class="tipo-select">
                     <option value="cronometro" <?php echo $tarjeta['tipo'] == 'cronometro' ? 'selected' : ''; ?>>Cronómetro</option>
                     <option value="temporizador" <?php echo $tarjeta['tipo'] == 'temporizador' ? 'selected' : ''; ?>>Temporizador</option>
                 </select>
+                <div class="message"></div>
             </div>
         <?php endforeach; ?>
     </div>
@@ -77,15 +90,42 @@
                 var nuevaTarjeta = `
                     <div class="card" data-index="">
                         <button class="delete-button">X</button>
-                        <h3>Nueva Tarjeta</h3>
+                        <button class="edit-button">✎</button>
+                        <input type="text" name="tarjetas[][nombre]" value="Equipo" disabled />
                         <label for="tipo">Tipo:</label>
-                        <select name="tarjetas[][tipo]">
+                        <select name="tarjetas[][tipo]" class="tipo-select">
                             <option value="cronometro">Cronómetro</option>
                             <option value="temporizador">Temporizador</option>
                         </select>
+                        <div class="message"></div>
                     </div>`;
                 $('#cards-container').append(nuevaTarjeta);
                 actualizarCantidadTarjetas();
+            });
+
+            // Editar nombre de la tarjeta
+            $(document).on('click', '.edit-button', function() {
+                var input = $(this).siblings('input[type="text"]');
+                if (input.is(':disabled')) {
+                    input.prop('disabled', false).focus();
+                    $(this).text('✓').css('background-color', 'green');
+                } else {
+                    input.prop('disabled', true);
+                    $(this).text('✎').css('background-color', 'blue');
+                }
+            });
+
+            // Mostrar mensajes según la selección del combobox
+            $(document).on('change', '.tipo-select', function() {
+                var messageDiv = $(this).siblings('.message');
+                var selectedValue = $(this).val();
+                if (selectedValue === 'cronometro') {
+                    messageDiv.text('Hola');
+                } else if (selectedValue === 'temporizador') {
+                    messageDiv.text('Qué tal');
+                } else {
+                    messageDiv.text('');
+                }
             });
 
             // Actualizar la cantidad de tarjetas
@@ -93,6 +133,8 @@
                 var cantidad = $('.card').length;
                 $('#cantidad-tarjetas').text(cantidad);
             }
+
+           
         });
     </script>
 
