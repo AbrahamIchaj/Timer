@@ -13,46 +13,51 @@
 
     <!-- Custom Styles -->
 </head>
-<body class="container mt-5">
+<body class="container-fluid text-center mt-5">
+    <div class="container">
+        <h1 class="mb-4">Bienvenido, <?php echo $username; ?>!</h1>
 
-    <h1 class="text-center mb-4">Bienvenido, <?php echo $username; ?>!</h1>
+        <div class="text-center mb-4">
+            <button class="btn add-button" id="add-button">+ Agregar tarjeta</button>
+        </div>
 
-    <div class="text-center">
-        <button class="btn btn-primary add-button" id="add-button">+ Agregar tarjeta</button>
-    </div>
-    <h2 class="text-center mt-4">Cantidad de tarjetas: <span id="cantidad-tarjetas"><?php echo count($tarjetas); ?></span></h2>
+        <h2>Cantidad de tarjetas: <span id="cantidad-tarjetas"><?php echo count($tarjetas); ?></span></h2>
 
-    <div class="row" id="cards-container">
-        <?php foreach ($tarjetas as $index => $tarjeta): ?>
-            <div class="col-md-6">
-                <div class="card shadow-sm mb-4" data-index="<?php echo $index; ?>">
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-danger btn-sm delete-button" title="Eliminar tarjeta">X</button>
-                        <button class="btn btn-info btn-sm edit-button" title="Editar tarjeta">✎</button>
-                    </div>
-                    
-                    <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[<?php echo $index; ?>][nombre]" value="<?php echo $tarjeta['nombre']; ?>" disabled />
+        <div class="row justify-content-center mt-4" id="cards-container">
+            <?php foreach ($tarjetas as $index => $tarjeta): ?>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm" data-index="<?php echo $index; ?>">
+                        <div class="d-flex justify-content-between mb-3">
+                            <button class="delete-button" title="Eliminar tarjeta">X</button>
+                            <button class="edit-button" title="Editar tarjeta">✎</button>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="tipo">Tipo:</label>
-                        <select name="tarjetas[<?php echo $index; ?>][tipo]" class="form-control tipo-select">
-                            <option value="cronometro" <?php echo $tarjeta['tipo'] == 'cronometro' ? 'selected' : ''; ?>>Cronómetro</option>
-                            <option value="temporizador" <?php echo $tarjeta['tipo'] == 'temporizador' ? 'selected' : ''; ?>>Temporizador</option>
-                        </select>
-                    </div>
+                        <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[<?php echo $index; ?>][nombre]" value="<?php echo $tarjeta['nombre']; ?>" disabled />
 
-                    <div class="time-inputs mt-3 mb-3" style="display: <?php echo $tarjeta['tipo'] == 'temporizador' ? 'block' : 'none'; ?>">
-                        <input type="number" class="form-control d-inline-block hours-input" placeholder="Horas" min="0" max="23">
-                        <input type="number" class="form-control d-inline-block minutes-input" placeholder="Minutos" min="0" max="59">
-                        <input type="number" class="form-control d-inline-block seconds-input" placeholder="Segundos" min="0" max="59">
-                    </div>
+                        <div class="form-group">
+                            <label for="tipo" style="color: black;">Seleccionar:</label>
+                            <select name="tarjetas[<?php echo $index; ?>][tipo]" class="form-control tipo-select">
+                                <option value="cronometro" <?php echo $tarjeta['tipo'] == 'cronometro' ? 'selected' : ''; ?>>Cronómetro</option>
+                                <option value="temporizador" <?php echo $tarjeta['tipo'] == 'temporizador' ? 'selected' : ''; ?>>Temporizador</option>
+                            </select>
+                        </div>
 
-                    <div class="time-display" id="display-<?php echo $index; ?>">00:00:00.000</div>
+                        <div class="form-group">
+                        <div class="time-inputs mt-3 mb-3"  style="display: <?php echo $tarjeta['tipo'] == 'temporizador' ? 'block' : 'none'; ?>">
+                            <input type="number" class="form-control d-inline-block hours-input" placeholder="Horas" min="0" max="23" style="width: 90px">
+                            <input type="number" class="form-control d-inline-block minutes-input" placeholder="Minutos" min="0" max="59" style="width: 90px">
+                            <input type="number" class="form-control d-inline-block seconds-input" placeholder="Segundos" min="0" max="59" style="width: 90px">
+                        </div>
+                        </div>
 
-                    <div class="text-center mt-3">
-                        <button class="btn btn-success start-btn" data-index="<?php echo $index; ?>">Iniciar</button>
-                        <button class="btn btn-warning reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button>
-                    </div>
+
+
+                        <div class="time-display" id="display-<?php echo $index; ?>">00:00:00:000</div>
+
+                        <div class="text-center mt-3">
+                            <button class="btn btn-success start-btn" data-index="<?php echo $index; ?>">Iniciar</button>
+                            <button class="btn btn-warning reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button>
+                        </div>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -131,7 +136,7 @@
                 const minutes = Math.floor((s % 3600) / 60);
                 const seconds = Math.floor(s % 60);
                 const milliseconds = Math.floor((s % 1) * 1000);
-                return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+                return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${milliseconds.toString().padStart(3, '0')}`;
             }
 
             // Reiniciar cronómetro o temporizador
@@ -166,7 +171,7 @@
             // Agregar nueva tarjeta
             $('#add-button').click(function() {
                 var nuevaTarjeta = `
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="card shadow-sm mb-4" data-index="">
                             <div class="d-flex justify-content-between">
                                 <button class="btn btn-danger btn-sm delete-button" title="Eliminar tarjeta">X</button>
@@ -174,19 +179,18 @@
                             </div>
                             <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[][nombre]" value="Tarjeta Nueva" disabled />
                             <div class="form-group">
-                                <label for="tipo">Tipo:</label>
+                                <label for="tipo" style="color: black;">Elegir:</label>
                                 <select name="tarjetas[][tipo]" class="form-control tipo-select">
                                     <option value="cronometro">Cronómetro</option>
                                     <option value="temporizador">Temporizador</option>
                                 </select>
                             </div>
-                            <div class="time-inputs mt-3 mb-3" style="display:none;">
-                                <input type="number" class="form-control d-inline-block hours-input" placeholder="Horas" min="0" max="23">
-                                <input type="number" class="form-control d-inline-block minutes-input" placeholder="Minutos" min="0" max="59">
-                                <input type="number" class="form-control d-inline-block seconds-input" placeholder="Segundos
-                                </input>
-                            </div>
-                            <div class="time-display">00:00:00.000</div>
+                            <div class="time-inputs mt-3 mb-3" style="display: <?php echo $tarjeta['tipo'] == 'temporizador' ? 'block' : 'none'; ?>">
+                           <input type="number" class="form-control d-inline-block hours-input" placeholder="Horas" min="0" max="23" style="width: 90px">
+                            <input type="number" class="form-control d-inline-block minutes-input" placeholder="Minutos" min="0" max="59" style="width: 90px">
+                            <input type="number" class="form-control d-inline-block seconds-input" placeholder="Segundos" min="0" max="59" style="width: 90px">
+                        </div>
+                            <div class="time-display">00:00:00:000</div>
                             <div class="text-center mt-3">
                                 <button class="btn btn-success start-btn" data-index="">Iniciar</button>
                                 <button class="btn btn-warning reset-btn" data-index="">Reiniciar</button>

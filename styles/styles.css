@@ -1,75 +1,80 @@
-        .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-            margin: 10px;
-            display: inline-block;
-            width: 400px;
-            text-align: center;
-            position: relative;
-        }
-        .delete-button, .edit-button {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: red;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .edit-button {
-            right: 35px;
-            background-color: blue;
-        }
-        .add-button {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: green;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .cards-container {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .card input[type="text"] {
-            width: 80%;
-            margin-bottom: 10px;
-        }
-        .message {
-            margin-top: 10px;
-            font-weight: bold;
-        }
 
-        .card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .time-display {
-            font-size: 30px;
-            margin: 10px 0;
-            font-weight: bold;
-        }
-        button {
-            margin: 5px;
-        }
-        .time-inputs {
-            display: none;
-        }
+body {
+    background: linear-gradient(135deg, #e456d8 0%, #209cff 100%);
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+}
 
-        .time-display {
-            font-size: 30px;
-            margin: 10px 0;
-            font-weight: bold;
-        }
-        button {
-            margin: 5px;
-        }
-        .time-inputs {
-            display: none;
-        }
+h1, h2 {
+    color: #ffffff;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+}
 
-        
+.card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+.time-display {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+input, select {
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    font-size: 1rem;
+    background-color: #f1f3f6;
+    color: #333;
+}
+
+input:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+}
+
+.btn {
+    border-radius: 25px;
+    font-size: 1rem;
+    padding: 10px 20px;
+}
+
+.add-button {
+    background: linear-gradient(135deg, #68e0cf 0%, #209cff 100%);
+    border: none;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+}
+
+.add-button:hover {
+    background: linear-gradient(135deg, #209cff 0%, #68e0cf 100%);
+}
+
+.start-btn {
+    background: #56CCF2;
+    color: white;
+    border: none;
+}
+
+.reset-btn {
+    background: #F2994A;
+    color: white;
+    border: none;
+}
+
+.delete-button, .edit-button {
+    background: transparent;
+    border: none;
+    color: #FF3D71;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.delete-button:hover, .edit-button:hover {
+    color: #FF1744;
+}
