@@ -37,4 +37,11 @@ class CronometroController extends CI_Controller {
             $this->load->view('mostrar_tarjetas', $data);
         }
     }
+    
+
+    public function cronometro_form() {
+        $this->load->view('cronometro_form');  // Carga la vista del formulario cronómetro
+    }
+
+
 }

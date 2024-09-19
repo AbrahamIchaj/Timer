@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,6 +20,10 @@
 
         <div class="text-center mb-4">
             <button class="btn add-button" id="add-button">+ Agregar tarjeta</button>
+        </div>
+
+        <div class="text-center mb-4">
+        <button class="btn btn-danger" id="exit-button">Salir</button>
         </div>
 
         <h2>Cantidad de tarjetas: <span id="cantidad-tarjetas"><?php echo count($tarjetas); ?></span></h2>
@@ -72,7 +77,7 @@
                 let pausedTimes = {};
                 let totalElapsedTimes = {};
 
-
+                
 
                  // Manejador de cambio de tipo (cronómetro o temporizador)
                 $(document).on('change', '.tipo-select', function() {
@@ -193,15 +198,15 @@
                 });
 
 
-                // LOCALSTORAGE
+                //-------------------- LOCALSTORAGE
                 $('.card-container').each(function(index) {
                 let display = $(this).find('.time-display');
                 loadStateFromLocalStorage(index, display);
             });
 
-            // Guardar el estado del cronómetro/temporizador en localStorage
-            function clearAndSaveStateToLocalStorage() {
-                localStorage.clear(); // Limpiar antes de guardar
+                // Guardar el estado del cronómetro/temporizador en localStorage
+                function clearAndSaveStateToLocalStorage() {
+                    localStorage.clear(); // Limpiar antes de guardar
 
                 $('.card-container').each(function(index) {
                     localStorage.setItem('timer-' + index, JSON.stringify({
@@ -233,11 +238,6 @@
                     }
                 }
             }
-
-
-
-
-
 
                 //
 
@@ -305,6 +305,12 @@
                         $(this).find('.time-display').attr('id', 'display-' + index);
                     });
                 }
+            });
+
+             // Botón salir
+             $('#exit-button').click(function() {
+                localStorage.clear();
+                window.location.href = "<?php echo site_url('CronometroController/cronometro_form'); ?>";
             });
         </script>
 

@@ -56,3 +56,5 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['default_controller'] = 'CronometroController';
 $route['cronometro/procesarFormulario'] = 'CronometroController/procesarFormulario';
+
+
