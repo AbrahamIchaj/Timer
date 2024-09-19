@@ -69,8 +69,12 @@
                 let timers = {};         // Guardar intervalos activos
                 let intervals = {};      // Guardar el tiempo acumulado en cada cronómetro/temporizador
                 let startTimes = {};     // Guardar el tiempo en el que el cronómetro comenzó o se reanudó
+                let pausedTimes = {};
+                let totalElapsedTimes = {};
 
-                // Manejador de cambio de tipo (cronómetro o temporizador)
+
+
+                 // Manejador de cambio de tipo (cronómetro o temporizador)
                 $(document).on('change', '.tipo-select', function() {
                     var tipo = $(this).val();
                     var card = $(this).closest('.card');
@@ -81,19 +85,33 @@
                     }
                 });
 
-                // Iniciar cronómetro o temporizador
-                $(document).on('click', '.start-btn', function() {
+                /// Iniciar cronómetro o temporizador
+                    $(document).on('click', '.start-btn', function() {
                     let index = $(this).data('index');
                     let card = $(this).closest('.card');
                     let tipo = card.find('.tipo-select').val();
                     let display = card.find('.time-display');
 
                     if (timers[index]) {
-                        clearInterval(timers[index]);  // Pausar
-                        timers[index] = null;          // Indicar que está pausado
+                        // Pausar cronómetro
+                        clearInterval(timers[index]);
+                        timers[index] = null;
+                        // Guardar el tiempo transcurrido hasta la pausa
+                        pausedTimes[index] = Date.now();
                         $(this).text('Iniciar');
                     } else {
-                        startTimes[index] = Date.now();
+                        // Reanudar o iniciar cronómetro
+                        if (pausedTimes[index]) {
+                            // Reanudar desde la pausa
+                            let pausedDuration = Date.now() - pausedTimes[index];
+                            startTimes[index] += pausedDuration;  // Ajustar tiempo de inicio
+                            pausedTimes[index] = null;  // Limpiar la pausa
+                        } else if (!totalElapsedTimes[index]) {
+                            // Iniciar por primera vez
+                            startTimes[index] = Date.now();
+                            totalElapsedTimes[index] = 0;  // Tiempo total inicial
+                        }
+
                         if (tipo === 'cronometro') {
                             startCronometro(index, display);
                         } else if (tipo === 'temporizador') {
@@ -101,39 +119,41 @@
                         }
                         $(this).text('Pausar');
                     }
+                    clearAndSaveStateToLocalStorage();
                 });
 
                 // Cronómetro
                 function startCronometro(index, display) {
-                    let elapsed = intervals[index] || 0;  // Tiempo transcurrido hasta el momento
-                    timers[index] = setInterval(function() {
-                        let currentTime = Date.now() - startTimes[index] + elapsed;
-                        intervals[index] = currentTime;
-                        display.text(formatTime(currentTime / 1000));  // Convertir ms a segundos para mostrar
-                    }, 10);
-                }
-
+                timers[index] = setInterval(function() {
+                    let currentTime = Date.now() - startTimes[index];
+                    intervals[index] = totalElapsedTimes[index] + currentTime;
+                    display.text(formatTime(intervals[index] / 1000));
+                    clearAndSaveStateToLocalStorage();
+                }, 10);
+    }
                 // Temporizador
                 function startTemporizador(index, display, card) {
-                    let hours = parseInt(card.find('.hours-input').val()) || 0;
-                    let minutes = parseInt(card.find('.minutes-input').val()) || 0;
-                    let seconds = parseInt(card.find('.seconds-input').val()) || 0;
-                    
-                    let totalMilliseconds = ((hours * 3600) + (minutes * 60) + seconds) * 1000;
+                let hours = parseInt(card.find('.hours-input').val()) || 0;
+                let minutes = parseInt(card.find('.minutes-input').val()) || 0;
+                let seconds = parseInt(card.find('.seconds-input').val()) || 0;
+
+                let totalMilliseconds = ((hours * 3600) + (minutes * 60) + seconds) * 1000;
+                intervals[index] = totalMilliseconds;
+
+                timers[index] = setInterval(function() {
+                    totalMilliseconds -= 10;
                     intervals[index] = totalMilliseconds;
+                    display.text(formatTime(totalMilliseconds / 1000));
 
-                    timers[index] = setInterval(function() {
-                        totalMilliseconds -= 10;
-                        intervals[index] = totalMilliseconds;
-                        display.text(formatTime(totalMilliseconds / 1000));
+                    if (totalMilliseconds <= 0) {
+                        clearInterval(timers[index]);
+                        alert('¡Tiempo terminado!');
+                    }
+                    clearAndSaveStateToLocalStorage();
+                }, 10);
+            }
 
-                        if (totalMilliseconds <= 0) {
-                            clearInterval(timers[index]);
-                            alert('¡Tiempo terminado!');
-                        }
-                    }, 10);
-                }
-
+    
                 // Formato de tiempo para mostrar
                 function formatTime(s) {
                     const hours = Math.floor(s / 3600);
@@ -145,20 +165,19 @@
 
                 // Reiniciar cronómetro o temporizador
                 $(document).on('click', '.reset-btn', function() {
-                    let index = $(this).data('index');
+                let index = $(this).data('index');
 
-                    clearInterval(timers[index]);       // Detener el cronómetro/temporizador
-                    timers[index] = null;               // Limpiar el intervalo
-                    intervals[index] = 0;               // Reiniciar el tiempo transcurrido
-                    startTimes[index] = null;           // Limpiar el tiempo de inicio
+                clearInterval(timers[index]);
+                timers[index] = null;
+                intervals[index] = 0;
+                totalElapsedTimes[index] = 0;
+                startTimes[index] = null;
+                pausedTimes[index] = null;
 
-                    // Restablecer el valor en el display a 0
-                    $('#display-' + index).text('00:00:00:000');
-
-                    // Cambiar el texto del botón de iniciar/pausar a "Iniciar"
-                    $('.start-btn[data-index="' + index + '"]').text('Iniciar');
-                });
-                
+                $('#display-' + index).text('00:00:00:000');
+                $('.start-btn[data-index="' + index + '"]').text('Iniciar');
+                clearAndSaveStateToLocalStorage();
+            });
 
                 // Función para editar el nombre de la tarjeta
                 $(document).on('click', '.edit-button', function() {
@@ -172,6 +191,55 @@
                         $(this).text('✔');
                     }
                 });
+
+
+                // LOCALSTORAGE
+                $('.card-container').each(function(index) {
+                let display = $(this).find('.time-display');
+                loadStateFromLocalStorage(index, display);
+            });
+
+            // Guardar el estado del cronómetro/temporizador en localStorage
+            function clearAndSaveStateToLocalStorage() {
+                localStorage.clear(); // Limpiar antes de guardar
+
+                $('.card-container').each(function(index) {
+                    localStorage.setItem('timer-' + index, JSON.stringify({
+                        timeElapsed: intervals[index] || 0,
+                        startTime: startTimes[index] || null,
+                        pausedTime: pausedTimes[index] || null,
+                        totalElapsed: totalElapsedTimes[index] || 0,
+                        paused: timers[index] === null
+                    }));
+                });
+            }
+
+                // Cargar el estado desde localStorage
+                function loadStateFromLocalStorage(index, display) {
+                const savedData = localStorage.getItem('timer-' + index);
+                if (savedData) {
+                    const timerData = JSON.parse(savedData);
+                    intervals[index] = timerData.timeElapsed || 0;
+                    startTimes[index] = timerData.startTime || null;
+                    pausedTimes[index] = timerData.pausedTime || null;
+                    totalElapsedTimes[index] = timerData.totalElapsed || 0;
+
+                    if (timerData.paused) {
+                        timers[index] = null;
+                        display.text(formatTime(totalElapsedTimes[index] / 1000));
+                        $('.start-btn[data-index="' + index + '"]').text('Iniciar');
+                    } else if (startTimes[index]) {
+                        startCronometro(index, display);
+                    }
+                }
+            }
+
+
+
+
+
+
+                //
 
                 // Eliminar tarjeta
                 $(document).on('click', '.delete-button', function() {
@@ -239,6 +307,5 @@
                 }
             });
         </script>
-    </div>
+
 </body>
-</html>
