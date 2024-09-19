@@ -8,7 +8,6 @@
 
     <h1>Configurar Cronómetros y Temporizadores</h1>
 
-
     <!-- Formulario para ingresar nombre de usuario y cantidad de tarjetas -->
     <?php echo form_open('CronometroController/procesarFormulario'); ?>
     
@@ -21,6 +20,11 @@
         <input type="submit" value="Aceptar" />
 
     <?php echo form_close(); ?>
+
+    <!-- Limpiar el localStorage al cargar el formulario -->
+    <script>
+        localStorage.clear();
+    </script>
 
 </body>
 </html>
