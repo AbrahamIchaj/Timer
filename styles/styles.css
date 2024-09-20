@@ -3,6 +3,7 @@ body {
     background: linear-gradient(135deg, #60baff 0%, #004cff 100%); 
     font-family: 'Poppins', sans-serif;
     min-height: 100vh;            
+}
    
 h1, h2, h3 {
     color: #ffffff;
@@ -108,3 +109,16 @@ input:focus, select:focus {
     font-size: 14px;
     padding-right: 10px;
   }
+
+/* Estilo para cuando el temporizador llega a 0 */
+.timer-finished {
+  background-color: red;
+  animation: blink 1s infinite;
+}
+
+/* Efecto de parpadeo */
+@keyframes blink {
+  0% { background-color: rgb(0, 0, 0); }
+  50% { background-color: red; }
+  100% { background-color: rgb(0, 0, 0); }
+}

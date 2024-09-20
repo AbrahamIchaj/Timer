@@ -112,16 +112,16 @@
                     let display = card.find('.time-display');
 
                     if (timers[index]) {
-                        // Pausar cronómetro
+                        // Pausar cronómetro o temporizador
                         clearInterval(timers[index]);
                         timers[index] = null;
-                        pausedTimes[index] = Date.now();  // Guardar el tiempo de pausa
+                        pausedTimes[index] = Date.now();  // Guardar el momento en el que se pausó
                         $(this).text('Iniciar');
                     } else {
-                        // Reanudar o iniciar cronómetro
+                        // Reanudar o iniciar cronómetro o temporizador
                         if (pausedTimes[index]) {
                             let pausedDuration = Date.now() - pausedTimes[index];
-                            startTimes[index] += pausedDuration;  // Ajustar tiempo de inicio
+                            startTimes[index] += pausedDuration;  // Ajustar el tiempo de inicio considerando la pausa
                             pausedTimes[index] = null;
                         } else if (!totalElapsedTimes[index]) {
                             startTimes[index] = Date.now();
@@ -131,12 +131,20 @@
                         if (tipo === 'cronometro') {
                             startCronometro(index, display);
                         } else if (tipo === 'temporizador') {
+                            // Solo inicializar el temporizador si no se ha pausado antes
+                            if (!intervals[index]) {
+                                let hours = parseInt(card.find('.hours-input').val()) || 0;
+                                let minutes = parseInt(card.find('.minutes-input').val()) || 0;
+                                let seconds = parseInt(card.find('.seconds-input').val()) || 0;
+                                intervals[index] = ((hours * 3600) + (minutes * 60) + seconds) * 1000;
+                            }
                             startTemporizador(index, display, card);
                         }
                         $(this).text('Pausar');
                     }
                     saveTimerStateToLocalStorage();
                 });
+
 
                 // Cronómetro
                 function startCronometro(index, display) {
@@ -150,25 +158,28 @@
 
                 // Temporizador
                 function startTemporizador(index, display, card) {
-                    let hours = parseInt(card.find('.hours-input').val()) || 0;
-                    let minutes = parseInt(card.find('.minutes-input').val()) || 0;
-                    let seconds = parseInt(card.find('.seconds-input').val()) || 0;
-
-                    let totalMilliseconds = ((hours * 3600) + (minutes * 60) + seconds) * 1000;
-                    intervals[index] = totalMilliseconds;
+                    let totalMilliseconds = intervals[index];  // Tiempo restante guardado
 
                     timers[index] = setInterval(function() {
-                        totalMilliseconds -= 10;
+                        totalMilliseconds -= 10;  // Restar 10 ms en cada iteración
                         intervals[index] = totalMilliseconds;
                         display.text(formatTime(totalMilliseconds / 1000));
 
                         if (totalMilliseconds <= 0) {
                             clearInterval(timers[index]);
+
+                            // Cambiar fondo de la tarjeta a rojo y agregar animación
+                            card.addClass('timer-finished');
+
+                            // Mostrar alerta
                             alert('¡Tiempo terminado!');
                         }
                         saveTimerStateToLocalStorage();
                     }, 10);
                 }
+
+
+
 
                 // Formato de tiempo
                 function formatTime(s) {
@@ -182,17 +193,23 @@
                 // Reiniciar
                 $(document).on('click', '.reset-btn', function() {
                     let index = $(this).data('index');
+                    let card = $(this).closest('.card'); // Obtener la tarjeta actual
 
-                    clearInterval(timers[index]);
+                    clearInterval(timers[index]);  // Detener el temporizador
                     timers[index] = null;
-                    intervals[index] = 0;
+                    intervals[index] = 0;  // Restablecer tiempo transcurrido
                     totalElapsedTimes[index] = 0;
                     startTimes[index] = null;
                     pausedTimes[index] = null;
 
+                    // Restablecer la pantalla de tiempo a 00:00:00:000
                     $('#display-' + index).text('00:00:00:000');
                     $('.start-btn[data-index="' + index + '"]').text('Iniciar');
-                    saveTimerStateToLocalStorage();
+
+                    // Remover la clase de finalización de temporizador y restablecer el estilo por defecto
+                    card.removeClass('timer-finished');
+
+                    saveTimerStateToLocalStorage();  // Guardar el estado en localStorage
                 });
 
                 // Guardar cronómetro/temporizador en localStorage sin eliminar tarjetas
