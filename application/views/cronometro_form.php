@@ -7,87 +7,8 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?php echo base_url('styles/bootstrap.css'); ?>">
-    <!-- <link rel="stylesheet" href="<?php echo base_url('styles/styles.css'); ?>"> -->
-    <style>
-       
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .form-container {
-            display: flex;
-            width: 850px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .form-left {
-            background: linear-gradient(135deg, #e456d8 0%, #209cff 50%);
-            padding: 10px;
-            width: 50%;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .form-left img {
-            width: 200px;
-            margin-bottom: 20px;
-        }
-        .form-left h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .form-left p {
-            text-align: center;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 30px;
-        }
-        .form-right {
-            background-color: white;
-            padding: 40px;
-            width: 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .form-right h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-control {
-            border-radius: 25px;
-            padding: 15px;
-        }
-        .btn-primary {
-            background-color: #4e73df;
-            border: none;
-            border-radius: 25px;
-            padding: 10px 30px;
-            font-size: 16px;
-        }
-        .form-footer {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .form-footer small {
-            font-size: 12px;
-        }
-        .form-footer a {
-            color: #4e73df;
-        }
+    <link rel="stylesheet" href="<?php echo base_url('styles/style_form.css'); ?>">
 
-     
-
-    </style>
 </head>
 <body>
 
@@ -100,7 +21,7 @@
         </div>
 
         <div class="form-right">
-            <h3>Configurar Cronómetros y Temporizadores</h3>
+            <h3>Cronómetros y Temporizadores</h3>
 
             <!-- Formulario adaptado -->
             <?php echo form_open('CronometroController/procesarFormulario'); ?>
@@ -122,11 +43,6 @@
 <script>
     localStorage.clear();
 </script>
-
-<!-- Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

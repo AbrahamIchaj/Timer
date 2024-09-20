@@ -11,21 +11,36 @@
     <!-- jQuery -->
     <script type="text/javascript" src="<?php echo base_url('styles/jquery-3.3.1.min.js'); ?>"></script>
 
+
 </head>
-<body class="container-fluid text-center mt-5">
+<nav class="navbar navbar-expand-lg navbar-dark">
+    
+<h3>Total de contadores: <span id="cantidad-tarjetas"><?php echo count($tarjetas); ?></span></h3>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Menú de navegación -->
+      <ul class="navbar-nav">
+       
+      </ul>
+
+      <!-- Sección derecha con botones y usuario -->
+      <div class="d-flex align-items-center">
+        <span class="user-section ">Bienvenido: <?php echo $username; ?>!</span>
+        <button class="btn add-button mx-2" id="add-button">+ Agregar tarjeta</button>
+        <button class="btn btn-danger" id="exit-button">Cerrar Sesión</button>
+      </div>
+    </div>
+  </nav>
+    
+
+<!-- MENU -->
+
+<body>
     <div class="container">
-        <h1 class="mb-4">Bienvenido, <?php echo $username; ?>!</h1>
-
-        <div class="text-center mb-4">
-            <button class="btn add-button" id="add-button">+ Agregar tarjeta</button>
-        </div>
-
-        <div class="text-center mb-4">
-            <button class="btn btn-danger" id="exit-button">Salir</button>
-        </div>
-
-        <h2>Cantidad de tarjetas: <span id="cantidad-tarjetas"><?php echo count($tarjetas); ?></span></h2>
-
+       
         <div class="row justify-content-center mt-4" id="cards-container">
         
         <?php foreach ($tarjetas as $index => $tarjeta): ?>
@@ -40,7 +55,7 @@
                     <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[<?php echo $index; ?>][nombre]" value="<?php echo $tarjeta['nombre']; ?>" disabled />
 
                     <div class="form-group">
-                        <label for="tipo" style="color: black;">Seleccionar:</label>
+                        <label for="tipo" style="color: white">Seleccionar:</label>
                         <select name="tarjetas[<?php echo $index; ?>][tipo]" class="form-control tipo-select">
                             <option value="cronometro" <?php echo $tarjeta['tipo'] == 'cronometro' ? 'selected' : ''; ?>>Cronómetro</option>
                             <option value="temporizador" <?php echo $tarjeta['tipo'] == 'temporizador' ? 'selected' : ''; ?>>Temporizador</option>
@@ -59,7 +74,7 @@
 
                     <div class="text-center mt-3">
                         <button class="btn btn-primary start-btn" data-index="<?php echo $index; ?>">Iniciar</button>
-                        <button class="btn btn-dark reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button>
+                        <button class="btn btn-danger reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button>
                     </div>
                 </div>
             </div>
@@ -270,9 +285,9 @@
                         <button class="delete-button" title="Eliminar tarjeta">X</button>
                         <button class="edit-button" title="Editar tarjeta">✎</button>
                     </div>
-                    <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[${index}][nombre]" value="${nombre}" />
+                    <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[${index}][nombre]" value="${nombre}" disabled/>
                     <div class="form-group">
-                        <label for="tipo" style="color: black;">Seleccionar:</label>
+                        <label for="tipo" style="color: white">Seleccionar:</label>
                         <select name="tarjetas[${index}][tipo]" class="form-control tipo-select">
                             <option value="cronometro" ${tipo === 'cronometro' ? 'selected' : ''}>Cronómetro</option>
                             <option value="temporizador" ${tipo === 'temporizador' ? 'selected' : ''}>Temporizador</option>
@@ -287,7 +302,7 @@
                         <p class="time-display" id="display-${index}">00:00:00:000</p>
                         <div class="text-center mt-3">
                                  <button class="btn btn-primary start-btn" data-index="${index}">Iniciar</button>
-                                <button class="btn btn-dark reset-btn" data-index="${index}">Reiniciar</button>
+                                <button class="btn btn-danger reset-btn" data-index="${index}">Reiniciar</button>
                         </div>
                     </div>
                 </div>

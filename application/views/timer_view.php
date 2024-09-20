@@ -403,10 +403,6 @@ let timers = {};         // Guardar intervalos activos
         </script>
 
 
-
-
-
-
 <!-- ESTA FUNCIONA AL RECARGAR GUARDA LAS TARJETAS NUEVAS -->
 
 <!DOCTYPE html>
@@ -470,7 +466,7 @@ let timers = {};         // Guardar intervalos activos
 
                     <div class="text-center mt-3">
                         <button class="btn btn-primary start-btn" data-index="<?php echo $index; ?>">Iniciar</button>
-                        <button class="btn btn-dark reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button>
+                        <button class="btn btn-danger reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button>
                     </div>
                 </div>
             </div>
