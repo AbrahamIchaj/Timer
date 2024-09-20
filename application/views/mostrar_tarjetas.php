@@ -157,8 +157,18 @@
                 }
 
                 // Temporizador
-                function startTemporizador(index, display, card) {
-                    let totalMilliseconds = intervals[index];  // Tiempo restante guardado
+                function startTemporizador(index, display, card, reanudar = false) {
+                    let totalMilliseconds;
+                    
+                    if (reanudar) {
+                        totalMilliseconds = intervals[index];  // Cargar el tiempo restante guardado
+                    } else {
+                        let hours = parseInt(card.find('.hours-input').val()) || 0;
+                        let minutes = parseInt(card.find('.minutes-input').val()) || 0;
+                        let seconds = parseInt(card.find('.seconds-input').val()) || 0;
+                        totalMilliseconds = ((hours * 3600) + (minutes * 60) + seconds) * 1000;
+                        intervals[index] = totalMilliseconds;  // Guardar el tiempo restante
+                    }
 
                     timers[index] = setInterval(function() {
                         totalMilliseconds -= 10;  // Restar 10 ms en cada iteración
@@ -167,14 +177,10 @@
 
                         if (totalMilliseconds <= 0) {
                             clearInterval(timers[index]);
-
-                            // Cambiar fondo de la tarjeta a rojo y agregar animación
                             card.addClass('timer-finished');
-
-                            // Mostrar alerta
                             alert('¡Tiempo terminado!');
                         }
-                        saveTimerStateToLocalStorage();
+                        saveTimerStateToLocalStorage();  // Guardar el estado actualizado
                     }, 10);
                 }
 
@@ -220,13 +226,15 @@
                             startTime: startTimes[index] || null,
                             pausedTime: pausedTimes[index] || null,
                             totalElapsed: totalElapsedTimes[index] || 0,
-                            paused: timers[index] === null
+                            paused: timers[index] === null,
+                            tipo: $(this).find('.tipo-select').val(), // Guardar si es cronómetro o temporizador
                         }));
                     });
                 }
 
+
                 // Cargar estado del cronómetro/temporizador desde localStorage
-                function loadStateFromLocalStorage(index, display) {
+                function loadStateFromLocalStorage(index, display, card) {
                     const savedData = localStorage.getItem('timer-' + index);
                     if (savedData) {
                         const timerData = JSON.parse(savedData);
@@ -240,10 +248,14 @@
                             display.text(formatTime(totalElapsedTimes[index] / 1000));
                             $('.start-btn[data-index="' + index + '"]').text('Iniciar');
                         } else if (startTimes[index]) {
-                            startCronometro(index, display);
+                            if (timerData.tipo === 'cronometro') {
+                                startCronometro(index, display);
+                            } else if (timerData.tipo === 'temporizador') {
+                                startTemporizador(index, display, card, true); // true para reanudar
+                            }
                         }
                     }
-                }      
+                }     
 
             // Agregar nueva tarjeta
             $('#add-button').click(function() {
