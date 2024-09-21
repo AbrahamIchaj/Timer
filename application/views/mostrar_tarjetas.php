@@ -76,7 +76,14 @@
                         <button class="btn btn-primary start-btn" data-index="<?php echo $index; ?>">Iniciar</button>
                         <button class="btn btn-danger reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button>
                     </div>
+
+                    <div class="form-group">
+                        <br>
+                    <label for="backgroundColor" style="color: white">Color de fondo:</label>
+                    <input type="color" style="background: rgba(20, 20, 20, 0.6);" class="form-control background-color-input" data-index="<?php echo $index; ?>" value="#ffffff">
                 </div>
+                </div>
+                
             </div>
         <?php endforeach; ?>
         </div>
@@ -275,34 +282,61 @@
 
             // Guardar tarjetas en localStorage
             function guardarTarjetasEnLocalStorage() {
-        var tarjetas = [];
-        $('.card-container').each(function() {
-            var nombre = $(this).find('.tarjeta-nombre').val();
-            var tipo = $(this).find('.tipo-select').val();
-            tarjetas.push({
-                nombre: nombre,
-                tipo: tipo
+            var tarjetas = [];
+            $('.card-container').each(function(index) {
+                var nombre = $(this).find('.tarjeta-nombre').val();
+                var tipo = $(this).find('.tipo-select').val();
+                var color = $(this).find('.background-color-input').val();
+                var backgroundImage = $(this).find('.background-image-input').val();
+                tarjetas.push({
+                    nombre: nombre,
+                    tipo: tipo,
+                    color: color,
+                    backgroundImage: backgroundImage
+                });
             });
-        });
-        localStorage.setItem('tarjetas', JSON.stringify(tarjetas));
-    }
-
-            // Cargar tarjetas desde localStorage solo si existen
-            function cargarTarjetasDesdeLocalStorage() {
-        var tarjetasGuardadas = JSON.parse(localStorage.getItem('tarjetas')) || [];
-
-        if (tarjetasGuardadas.length > 0) {
-            $('#cards-container').empty();  // Limpiar el contenedor
-
-            tarjetasGuardadas.forEach(function(tarjeta, index) {
-                var tarjetaHTML = crearTarjetaHTML(index, tarjeta.nombre, tarjeta.tipo);
-                $('#cards-container').append(tarjetaHTML);
-                loadStateFromLocalStorage(index, $('#display-' + index));
-            });
-
-            actualizarCantidadTarjetas();
+            localStorage.setItem('tarjetas', JSON.stringify(tarjetas));
         }
+            // Cargar tarjetas desde localStorage solo si existen
+            function guardarTarjetasEnLocalStorage() {
+    var tarjetas = [];
+    $('.card-container').each(function(index) {
+        var nombre = $(this).find('.tarjeta-nombre').val();
+        var tipo = $(this).find('.tipo-select').val();
+        var color = $(this).find('.background-color-input').val();
+        var backgroundImage = $(this).find('.background-image-input').val();
+        tarjetas.push({
+            nombre: nombre,
+            tipo: tipo,
+            color: color,
+            backgroundImage: backgroundImage
+        });
+    });
+    localStorage.setItem('tarjetas', JSON.stringify(tarjetas));
+}
+
+// Modificar la función de cargar tarjetas desde localStorage para aplicar color e imagen
+function cargarTarjetasDesdeLocalStorage() {
+    var tarjetasGuardadas = JSON.parse(localStorage.getItem('tarjetas')) || [];
+
+    if (tarjetasGuardadas.length > 0) {
+        $('#cards-container').empty();  // Limpiar el contenedor
+
+        tarjetasGuardadas.forEach(function(tarjeta, index) {
+            var tarjetaHTML = crearTarjetaHTML(index, tarjeta.nombre, tarjeta.tipo);
+            $('#cards-container').append(tarjetaHTML);
+
+            let card = $('#cards-container').find(`[data-index="${index}"] .card`);
+            card.css('background-color', tarjeta.color || '#ffffff');
+            if (tarjeta.backgroundImage) {
+                card.css('background-image', 'url(' + tarjeta.backgroundImage + ')');
+            }
+            loadStateFromLocalStorage(index, $('#display-' + index));
+        });
+
+        actualizarCantidadTarjetas();
     }
+}
 
             // Crear una nueva tarjeta
             function crearTarjetaHTML(index, nombre, tipo) {
@@ -391,6 +425,13 @@
             });
 
         });
+
+        $(document).on('change', '.background-color-input', function() {
+        let index = $(this).data('index');
+        let color = $(this).val();
+        $(this).closest('.card').css('background-color', color);
+        guardarTarjetasEnLocalStorage(); // Guardar cambios en localStorage
+    });
         </script>
 
 

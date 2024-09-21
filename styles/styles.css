@@ -19,6 +19,7 @@ h1, h2, h3 {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px); 
   opacity: 0.9;
+  transition: background-color 0.3s ease;
 }
 
 .time-display {
