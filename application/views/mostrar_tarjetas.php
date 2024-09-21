@@ -77,9 +77,16 @@
                     </div>
 
                     <div class="form-group">
+                    <label for="nota" style="color: white">Nota:</label>
+                    <textarea class="form-control tarjeta-nota" name="tarjetas[<?php echo $index; ?>][nota]" rows="3"><?php echo isset($tarjeta['nota']) ? $tarjeta['nota'] : ''; ?></textarea>
+                </div>
+
+
+                    <div class="form-group">
                         <br>
                     <label for="backgroundColor" style="color: white">Color de fondo:</label>
                     <input type="color" style="background: rgba(20, 20, 20, 0.6);" class="form-control background-color-input" data-index="<?php echo $index; ?>">
+                    
                 </div>
                 </div>
                 
@@ -95,7 +102,7 @@
         window.location.href = "<?php echo site_url('CronometroController/cronometro_form'); ?>";
     });
 
-    
+
 </script>
 
 </body>

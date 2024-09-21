@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
         let timers = {};         // Guardar intervalos activos
         let intervals = {};      // Guardar el tiempo acumulado en cada cronómetro/temporizador
@@ -192,21 +191,26 @@ $('#cantidad-tarjetas').text(cantidadTarjetas);
 
     // Guardar tarjetas en localStorage
     function guardarTarjetasEnLocalStorage() {
-    var tarjetas = [];
-    $('.card-container').each(function(index) {
-        var nombre = $(this).find('.tarjeta-nombre').val();
-        var tipo = $(this).find('.tipo-select').val();
-        var color = $(this).find('.background-color-input').val();
-        var backgroundImage = $(this).find('.background-image-input').val();
-        tarjetas.push({
-            nombre: nombre,
-            tipo: tipo,
-            color: color,
-            backgroundImage: backgroundImage
+        var tarjetas = [];
+        $('.card-container').each(function(index) {
+            var nombre = $(this).find('.tarjeta-nombre').val();
+            var tipo = $(this).find('.tipo-select').val();
+            var color = $(this).find('.background-color-input').val();
+            var nota = $(this).find('.tarjeta-nota').val();  // Obtener el contenido de la nota
+            
+            console.log('Guardando tarjeta:', { nombre, tipo, color, nota });  // Verifica qué se está guardando
+    
+            tarjetas.push({
+                nombre: nombre,
+                tipo: tipo,
+                color: color,
+                nota: nota  // Guardar la nota
+            });
         });
-    });
-    localStorage.setItem('tarjetas', JSON.stringify(tarjetas));
-}
+        localStorage.setItem('tarjetas', JSON.stringify(tarjetas));
+    }
+
+    
     // Cargar tarjetas desde localStorage solo si existen
     function guardarTarjetasEnLocalStorage() {
     var tarjetas = [];
@@ -226,67 +230,73 @@ $('#cantidad-tarjetas').text(cantidadTarjetas);
     }
 
 // Modificar la función de cargar tarjetas desde localStorage para aplicar color e imagen
-    function cargarTarjetasDesdeLocalStorage() {
+function cargarTarjetasDesdeLocalStorage() {
     var tarjetasGuardadas = JSON.parse(localStorage.getItem('tarjetas')) || [];
 
     if (tarjetasGuardadas.length > 0) {
-    $('#cards-container').empty();  // Limpiar el contenedor
+        $('#cards-container').empty();  // Limpiar el contenedor antes de cargar
 
-    tarjetasGuardadas.forEach(function(tarjeta, index) {
-        var tarjetaHTML = crearTarjetaHTML(index, tarjeta.nombre, tarjeta.tipo);
-        $('#cards-container').append(tarjetaHTML);
+        tarjetasGuardadas.forEach(function(tarjeta, index) {
+            var tarjetaHTML = crearTarjetaHTML(index, tarjeta.nombre, tarjeta.tipo);
+            $('#cards-container').append(tarjetaHTML);
 
-        let card = $('#cards-container').find(`[data-index="${index}"] .card`);
-        card.css('background-color', tarjeta.color || '#ffffff');
-        if (tarjeta.backgroundImage) {
-            card.css('background-image', 'url(' + tarjeta.backgroundImage + ')');
-        }
-        loadStateFromLocalStorage(index, $('#display-' + index));
-    });
+            let card = $('#cards-container').find(`[data-index="${index}"] .card`);
+            card.css('background-color', tarjeta.color || '#ffffff');
+            
+            card.find('.tarjeta-nota').val(tarjeta.nota);  // Cargar la nota desde localStorage
 
-    actualizarCantidadTarjetas();
+            console.log('Cargando tarjeta:', tarjeta);  // Verifica qué se está cargando
+
+            loadStateFromLocalStorage(index, $('#display-' + index));
+        });
+
+        actualizarCantidadTarjetas();
     }
-    }
+}
+
 
     // Crear una nueva tarjeta
-        function crearTarjetaHTML(index, nombre, tipo) {
-    var isTemporizador = tipo === 'temporizador' ? 'block' : 'none';
-    return `
-    <div class="col-md-4 mb-4 card-container" data-index="${index}">
-        <div class="card shadow-sm">
-            <div class="d-flex justify-content-between mb-3">
-                <button class="delete-button" title="Eliminar tarjeta">X</button>
-                <button class="edit-button" title="Editar tarjeta">✎</button>
-            </div>
-            <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[${index}][nombre]" value="${nombre}" disabled/>
-            <div class="form-group">
-                <label for="tipo" style="color: white">Seleccionar:</label>
-                <select name="tarjetas[${index}][tipo]" class="form-control tipo-select">
-                    <option value="cronometro" ${tipo === 'cronometro' ? 'selected' : ''}>Cronómetro</option>
-                    <option value="temporizador" ${tipo === 'temporizador' ? 'selected' : ''}>Temporizador</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <div class="time-inputs mt-3 mb-3" style="display: ${isTemporizador};">
-                    <input type="number" class="form-control d-inline-block hours-input input-w" placeholder="Horas" min="0" max="23">
-                    <input type="number" class="form-control d-inline-block minutes-input input-w" placeholder="Minutos" min="0" max="59">
-                    <input type="number" class="form-control d-inline-block seconds-input input-w" placeholder="Segundos" min="0" max="59">
+    function crearTarjetaHTML(index, nombre, tipo) {
+        var isTemporizador = tipo === 'temporizador' ? 'block' : 'none';
+        return `
+        <div class="col-md-4 mb-4 card-container" data-index="${index}">
+            <div class="card shadow-sm">
+                <div class="d-flex justify-content-between mb-3">
+                    <button class="delete-button" title="Eliminar tarjeta">X</button>
+                    <button class="edit-button" title="Editar tarjeta">✎</button>
                 </div>
-                <p class="time-display" id="display-${index}">00:00:00:000</p>
-                <div class="text-center mt-3">
-                         <button class="btn btn-primary start-btn" data-index="${index}">Iniciar</button>
-                        <button class="btn btn-danger reset-btn" data-index="${index}">Reiniciar</button>
+                <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[${index}][nombre]" value="${nombre}" disabled/>
+                <div class="form-group">
+                    <label for="tipo" style="color: white">Seleccionar:</label>
+                    <select name="tarjetas[${index}][tipo]" class="form-control tipo-select">
+                        <option value="cronometro" ${tipo === 'cronometro' ? 'selected' : ''}>Cronómetro</option>
+                        <option value="temporizador" ${tipo === 'temporizador' ? 'selected' : ''}>Temporizador</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div class="time-inputs mt-3 mb-3" style="display: ${isTemporizador};">
+                        <input type="number" class="form-control d-inline-block hours-input input-w" placeholder="Horas" min="0" max="23">
+                        <input type="number" class="form-control d-inline-block minutes-input input-w" placeholder="Minutos" min="0" max="59">
+                        <input type="number" class="form-control d-inline-block seconds-input input-w" placeholder="Segundos" min="0" max="59">
+                    </div>
+                    <p class="time-display" id="display-${index}">00:00:00:000</p>
+                    <div class="text-center mt-3">
+                             <button class="btn btn-primary start-btn" data-index="${index}">Iniciar</button>
+                            <button class="btn btn-danger reset-btn" data-index="${index}">Reiniciar</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="nota" style="color: white">Nota:</label>
+                    <textarea class="form-control tarjeta-nota" name="tarjetas[${index}][nota]" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="backgroundColor" style="color: white">Color de fondo:</label>
+                    <input type="color" class="form-control background-color-input" data-index="${index}">
                 </div>
             </div>
-            <div class="form-group">
-                <br>
-            <label for="backgroundColor" style="color: white">Color de fondo:</label>
-            <input type="color" style="background: rgba(20, 20, 20, 0.6);" class="form-control background-color-input" data-index="<?php echo $index; ?> style="background: rgba(20, 20, 20, 0.6);"">
         </div>
-        </div>
-    </div>
-`;
-}
+        `;
+    }
 
     // Guardar cambios al agregar tarjeta
     $(document).on('click', '#add-card', function() {
@@ -345,3 +355,17 @@ $('#cantidad-tarjetas').text(cantidadTarjetas);
     $(this).closest('.card').css('background-color', color);
     guardarTarjetasEnLocalStorage(); // Guardar cambios en localStorage
     });
+
+
+
+    ///NUEVA FUNCIONALIDAD
+// Capturar el evento beforeunload para guardar los datos antes de recargar la página
+window.addEventListener('beforeunload', function() {
+    guardarTarjetasEnLocalStorage();
+
+    // Cargar las tarjetas desde localStorage cuando la página se cargue
+document.addEventListener('DOMContentLoaded', function() {
+    cargarTarjetasDesdeLocalStorage();
+});
+
+});
