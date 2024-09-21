@@ -80,7 +80,7 @@
                     <div class="form-group">
                         <br>
                     <label for="backgroundColor" style="color: white">Color de fondo:</label>
-                    <input type="color" style="background: rgba(20, 20, 20, 0.6);" class="form-control background-color-input" data-index="<?php echo $index; ?>" value="#ffffff">
+                    <input type="color" style="background: rgba(20, 20, 20, 0.6);" class="form-control background-color-input" data-index="<?php echo $index; ?>">
                 </div>
                 </div>
                 
@@ -368,6 +368,11 @@ function cargarTarjetasDesdeLocalStorage() {
                                 <button class="btn btn-danger reset-btn" data-index="${index}">Reiniciar</button>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <br>
+                    <label for="backgroundColor" style="color: white">Color de fondo:</label>
+                    <input type="color" style="background: rgba(20, 20, 20, 0.6);" class="form-control background-color-input" data-index="<?php echo $index; ?> style="background: rgba(20, 20, 20, 0.6);"">
+                </div>
                 </div>
             </div>
         `;
@@ -426,6 +431,8 @@ function cargarTarjetasDesdeLocalStorage() {
 
         });
 
+        
+        //Cambiar el color de fondo
         $(document).on('change', '.background-color-input', function() {
         let index = $(this).data('index');
         let color = $(this).val();

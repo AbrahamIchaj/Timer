@@ -1,6 +1,6 @@
 
 body {
-    background: linear-gradient(135deg, #60baff 0%, #004cff 100%); 
+    background: linear-gradient(135deg, #ff60ec 0%, #004cff 100%); 
     font-family: 'Poppins', sans-serif;
     min-height: 100vh;            
 }
@@ -19,7 +19,7 @@ h1, h2, h3 {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px); 
   opacity: 0.9;
-  transition: background-color 0.3s ease;
+  
 }
 
 .time-display {
