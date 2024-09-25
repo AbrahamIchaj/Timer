@@ -29,9 +29,13 @@
                     <label for="username">Nombre de usuario</label>
                     <input type="text" class="form-control" id="username" name="username" value="<?php echo set_value('username'); ?>" placeholder="Ingrese su nombre de usuario" required>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="num_controles">Cantidad de tarjetas</label>
                     <input type="number" class="form-control" id="num_controles" name="num_controles" value="<?php echo set_value('num_controles'); ?>" min="1" placeholder="Ingrese la cantidad de tarjetas" required>
+                </div> -->
+                <div class="form-group">
+                    <label for="num_controles">Contraseña</label>
+                    <input type="number" class="form-control" id="contrasena" name="contrasena"  placeholder="Ingrese la contraseña" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Aceptar</button>
             <?php echo form_close(); ?>
