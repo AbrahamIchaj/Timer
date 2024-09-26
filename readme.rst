@@ -1,7 +1,7 @@
 ###################
 Timer para Control de Uso de Equipos
 ###################
-#Cambiar el nombre de la carpeta a Codeigniter-TIME
+##Cambiar el nombre de la carpeta a Codeigniter-TIME
 ## Descripción General
 Este proyecto tiene como objetivo desarrollar una aplicación web que funcione como un timer para controlar el uso de equipos. La aplicación permitirá a los usuarios configurar y utilizar tanto un temporizador que cuente hacia abajo (countdown) como un cronómetro que cuente hacia arriba (count-up).
 
