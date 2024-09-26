@@ -1,0 +1,25 @@
+Create database timer
+use timer
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    role_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(15) NOT NULL,
+    role_id INT,
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+INSERT INTO roles (role_name) VALUES ('administrador'), ('operador_cronometro'), ('operador_temporizador');
+
+select * from roles
+select * from users
+
+
+INSERT INTO users (username, password, role_id) VALUES
+('admin', '123', 1),
+('user1', '111', 2),
+('user2', '222', 3)
