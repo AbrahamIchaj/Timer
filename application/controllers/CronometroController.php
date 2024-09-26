@@ -27,33 +27,19 @@ class CronometroController extends CI_Controller {
             $username = $this->input->post('username');
             $password = $this->input->post('contrasena');
             
-    
             // Validar las credenciales
             $user = $this->UserModel->validar_usuario($username, $password);
-            $rol = '';
             if ($user) {
-              
                 if ($user->role == 'operador_cronometro') {
-                    $rol = ('operador_cronometro');
-                    // Pasar el username y rol a la vista mostrar_tarjetas_cronometro
                     $data['username'] = $username;
-                    $data['rol'] = $rol;
-
+                    $data['rol'] = $user->role;
                     $this->load->view('mostrar_tarjetas_cronometro', $data);
-
                 } elseif ($user->role == 'operador_temporizador') {
-                    $rol = 'operador_temporizador';
-                    // Pasar el username y rol a la vista mostrar_tarjetas_tempo
                     $data['username'] = $username;
-                    $data['rol'] = $rol;
+                    $data['rol'] = $user->role;
                     $this->load->view('mostrar_tarjetas_tempo', $data);
-
                 } elseif ($user->role == 'administrador') {
-                    $rol = 'operador_temporizador';
-                    // Pasar el username y rol a la vista mostrar_tarjetas_tempo
-                    $data['username'] = $username;
-                    $data['rol'] = $rol;
-                    $this->load->view('mostrar_admin', $data);
+                    $this->mostrar_admin(); // Llama a mostrar_admin
                 }
             } else {
                 // Si no coincide el usuario/contraseña, mostrar error
@@ -63,15 +49,33 @@ class CronometroController extends CI_Controller {
         }
     }
     
-
     public function cronometro_form() {
         $this->load->view('cronometro_form');  // Carga la vista del formulario cronómetro
     }
 
+    public function mostrar_admin() {
+        $data['roles'] = $this->UserModel->obtener_roles(); // Obtén los roles del modelo
+        $this->load->view('mostrar_admin', $data); // Cargar la vista con los datos
+    }
 
+    public function agregar_rol() {
+        $role_name = $this->input->post('role_name');
+        if ($this->UserModel->agregar_rol($role_name)) {
+            redirect('CronometroController/mostrar_admin');
+        }
+    }
+    
+    public function editar_rol($id) {
+        $role_name = $this->input->post('role_name');
+        if ($this->UserModel->editar_rol($id, $role_name)) {
+            redirect('CronometroController/mostrar_admin');
+        }
+    }
+    
+    public function eliminar_rol($id) {
+        if ($this->UserModel->eliminar_rol($id)) {
+            redirect('CronometroController/mostrar_admin');
+        }
+    }
+    
 }
-
-
-
-
-

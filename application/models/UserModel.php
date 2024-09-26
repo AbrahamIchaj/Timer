@@ -34,4 +34,31 @@ class UserModel extends CI_Model {
 
         return false;  // Si no coincide, devolver false
     }
+
+    public function obtener_roles() {
+        $query = $this->db->get('roles'); // Asegúrate de que se llame 'roles'
+        return $query->result(); // Devuelve todos los registros como objetos
+    }
+
+
+    public function agregar_rol($role_name) {
+        $data = array(
+            'role_name' => $role_name
+        );
+        return $this->db->insert('roles', $data);
+    }
+    
+    public function editar_rol($id, $role_name) {
+        $data = array(
+            'role_name' => $role_name
+        );
+        $this->db->where('id', $id);
+        return $this->db->update('roles', $data);
+    }
+    
+    public function eliminar_rol($id) {
+        $this->db->where('id', $id);
+        return $this->db->delete('roles');
+    }
+    
 }
