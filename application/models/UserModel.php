@@ -35,9 +35,10 @@ class UserModel extends CI_Model {
         return false;  // Si no coincide, devolver false
     }
 
+    // Roles
     public function obtener_roles() {
-        $query = $this->db->get('roles'); // Asegúrate de que se llame 'roles'
-        return $query->result(); // Devuelve todos los registros como objetos
+        $query = $this->db->get('roles'); 
+        return $query->result();
     }
 
 
@@ -60,5 +61,36 @@ class UserModel extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->delete('roles');
     }
-    
+
+    // Usuarios
+     // Obtener la lista de usuarios
+     public function obtener_users() {
+        $this->db->select('users.*, roles.role_name');
+        $this->db->join('roles', 'users.role_id = roles.id', 'left');
+        $query = $this->db->get('users');
+        return $query->result();
+    }
+
+    // Agregar usuario
+    public function agregar_usuario($data) {
+        return $this->db->insert('users', $data);
+    }
+
+    // Editar usuario
+    public function editar_usuario($id, $data) {
+        $this->db->where('id', $id);
+        return $this->db->update('users', $data);
+    }
+
+    // Eliminar usuario
+    public function eliminar_usuario($id) {
+        $this->db->where('id', $id);
+        return $this->db->delete('users');
+    }
+
+    // Obtener roles para el select
+    public function obtener_roles_u() {
+        $query = $this->db->get('roles');
+        return $query->result();
+    }
 }

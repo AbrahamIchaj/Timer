@@ -12,6 +12,12 @@
 </head>
 <body>
 
+<?php if (isset($error)): ?>
+    <script>
+        alert("<?php echo $error; ?>");
+    </script>
+<?php endif; ?>
+
 <div class="container">
     <div class="form-container">
         <div class="form-left">

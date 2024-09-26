@@ -39,10 +39,11 @@ class CronometroController extends CI_Controller {
                     $data['rol'] = $user->role;
                     $this->load->view('mostrar_tarjetas_tempo', $data);
                 } elseif ($user->role == 'administrador') {
-                    $this->mostrar_admin(); // Llama a mostrar_admin
+                    $data['username'] = $username;
+                    $data['rol'] = $user->role;
+                    $this->mostrar_admin();
                 }
             } else {
-                // Si no coincide el usuario/contraseña, mostrar error
                 $data['error'] = 'Credenciales incorrectas. Por favor, intente de nuevo.';
                 $this->load->view('cronometro_form', $data);
             }
@@ -52,9 +53,11 @@ class CronometroController extends CI_Controller {
     public function cronometro_form() {
         $this->load->view('cronometro_form');  // Carga la vista del formulario cronómetro
     }
+    
 
     public function mostrar_admin() {
-        $data['roles'] = $this->UserModel->obtener_roles(); // Obtén los roles del modelo
+        $data['roles'] = $this->UserModel->obtener_roles(); // Cargar roles para el select de usuarios
+        $data['users'] = $this->UserModel->obtener_users(); // Cargar usuarios para la tabla
         $this->load->view('mostrar_admin', $data); // Cargar la vista con los datos
     }
 
@@ -77,5 +80,58 @@ class CronometroController extends CI_Controller {
             redirect('CronometroController/mostrar_admin');
         }
     }
+
+    // Usuarios
+    // Mostrar la lista de usuarios
+    public function mostrar_admin2() {
+     
+    }
+
+    // Agregar un nuevo usuario
+    public function agregar_usuario() {
+        // Validar los campos del formulario
+        $this->form_validation->set_rules('username', 'Nombre de Usuario', 'required');
+        $this->form_validation->set_rules('password', 'Contraseña', 'required');
+        $this->form_validation->set_rules('role_id', 'Rol', 'required');
+    
+        if ($this->form_validation->run() === TRUE) {
+            $data = array(
+                'username' => $this->input->post('username'),
+                'password' => $this->input->post('password'),
+                'role_id' => $this->input->post('role_id')
+            );
+            $this->UserModel->agregar_usuario($data);
+            redirect('CronometroController/mostrar_admin'); // Redirigir a mostrar_admin
+        } else {
+            $this->mostrar_admin();
+        }
+    }
+    
+
+    // Editar usuario
+    public function editar_usuario($id) {
+        $this->form_validation->set_rules('username', 'Nombre de Usuario', 'required');
+        $this->form_validation->set_rules('password', 'Contraseña', 'required');
+        $this->form_validation->set_rules('role_id', 'Rol', 'required');
+
+        if ($this->form_validation->run() === TRUE) {
+            $data = array(
+                'username' => $this->input->post('username'),
+                'password' => $this->input->post('password'),
+                'role_id' => $this->input->post('role_id')
+            );
+            $this->UserModel->editar_usuario($id, $data);
+            redirect('CronometroController/mostrar_admin');
+        } else {
+            $this->mostrar_admin();
+        }
+    }
+
+    // Eliminar usuario
+    public function eliminar_usuario($id) {
+        $this->UserModel->eliminar_usuario($id);
+        redirect('CronometroController/mostrar_admin');
+    }
+
     
 }
