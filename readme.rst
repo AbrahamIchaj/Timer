@@ -1,7 +1,7 @@
 ###################
 Timer para Control de Uso de Equipos
 ###################
-##Cambiar el nombre de la carpeta a Codeigniter-TIME
+##Cambiar el nombre de la carpeta a Codeigniter-TIMER
 
 
 ## Descripción General
