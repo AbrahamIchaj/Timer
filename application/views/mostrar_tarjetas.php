@@ -13,6 +13,8 @@
 
     <!-- Script de funciones -->
     <script type="text/javascript" src="<?php echo base_url('scripts/script.js'); ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.11/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <!-- MENU -->
@@ -39,19 +41,18 @@
 <!-- TARJETAS -->
 <body>
     <div class="container">
-       
         <div class="row justify-content-center mt-4" id="cards-container">
-        
         <?php foreach ($tarjetas as $index => $tarjeta): ?>
-            <br>
             <div class="col-md-4 mb-4 card-container" data-index="<?php echo $index; ?>">
                 <div class="card shadow-sm">
                     <div class="d-flex justify-content-between mb-3">
                         <button class="delete-button" title="Eliminar tarjeta">X</button>
                         <button class="edit-button" title="Editar tarjeta">✎</button>
                     </div>
-
                     <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[<?php echo $index; ?>][nombre]" value="<?php echo $tarjeta['nombre']; ?>" disabled />
+
+                    <!-- Aquí agrego el botón de notificaciones -->
+                    <button class="btn btn-secondary notification-btn" data-index="<?php echo $index; ?>">Notificaciones</button>
 
                     <div class="form-group">
                         <label for="tipo" style="color: white">Seleccionar:</label>
@@ -71,21 +72,48 @@
 
                     <div class="time-display" id="display-<?php echo $index; ?>">00:00:00:000</div>
 
+                    <div class="form-group">
+                <br>
+            <label for="backgroundColor" style="color: white">Color de fondo:</label>
+            <input type="color" style="background: rgba(20, 20, 20, 0.6);" class="form-control background-color-input" data-index="<?php echo $index; ?> style="background: rgba(20, 20, 20, 0.6);"">
+        </div>
+
                     <div class="text-center mt-3">
                         <button class="btn btn-primary start-btn" data-index="<?php echo $index; ?>">Iniciar</button>
                         <button class="btn btn-danger reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button>
                     </div>
-
-                    <div class="form-group">
-                        <br>
-                    <label for="backgroundColor" style="color: white">Color de fondo:</label>
-                    <input type="color" style="background: rgba(20, 20, 20, 0.6);" class="form-control background-color-input" data-index="<?php echo $index; ?>">
                 </div>
-                </div>
-                
             </div>
         <?php endforeach; ?>
         </div>
+
+         <!-- Modal para la gestión de notificaciones -->
+         <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="notificationModalLabel">Configurar Notificaciones</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="notificationForm">
+                            <div class="form-group">
+                                <label for="notificationMessage">Mensaje de Notificación</label>
+                                <input type="text" class="form-control" id="notificationMessage" placeholder="Ingrese el mensaje">
+                            </div>
+                            <input type="hidden" id="notificationIndex">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" id="saveNotification">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <script>
 
