@@ -110,6 +110,12 @@
 
 
     <script>
+    // Botón salir
+    $('#exit-button').click(function() {
+        localStorage.clear();
+        window.location.href = "<?php echo site_url('CronometroController/cronometro_form'); ?>";
+    });
+
     // Abrir modal de notificaciones
     $(document).on('click', '.notification-btn', function() {
         let index = $(this).data('index');
