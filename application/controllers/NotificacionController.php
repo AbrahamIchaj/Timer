@@ -4,9 +4,8 @@ class NotificacionController extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('NotificacionModel');
-    } 
+    }
 
-    //funcion para guardar la notificacion
     public function guardar_notificacion() {
         $tarjeta_id = $this->input->post('tarjeta_id');
         $mensaje = $this->input->post('mensaje');
@@ -26,6 +25,11 @@ class NotificacionController extends CI_Controller {
             $this->NotificacionModel->create($data);
         }
 
+        echo json_encode(['status' => 'success']);
+    }
+
+    public function eliminar_notificacion($id) {
+        $this->NotificacionModel->delete($id);
         echo json_encode(['status' => 'success']);
     }
 }

@@ -13,30 +13,29 @@
 
     <!-- Script de funciones -->
     <script type="text/javascript" src="<?php echo base_url('scripts/script.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo base_url('styles/jquery-3.3.1.min.js'); ?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.11/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <!-- MENU -->
 <nav class="navbar navbar-expand-lg navbar-dark">
-    
-<h3>Total de contadores: <span id="cantidad-tarjetas"><?php echo count($tarjetas); ?></span></h3>
+    <h3>Total de contadores: <span id="cantidad-tarjetas"><?php echo count($tarjetas); ?></span></h3>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Menú de navegación -->
-      <ul class="navbar-nav">
-      </ul>
+      <ul class="navbar-nav"></ul>
       <!-- Sección derecha con botones y usuario -->
       <div class="d-flex align-items-center">
         <span class="user-section ">Bienvenido: <?php echo $username; ?>!</span>
-        <button class="btn add-button mx-2" id="add-button">+ Agregar tarjeta</button>
+        <!-- <button class="btn add-button mx-2" id="add-button">+ Agregar tarjeta</button> -->
         <button class="btn btn-danger" id="exit-button">Cerrar Sesión</button>
       </div>
     </div>
-  </nav>
+</nav>
     
 <!-- TARJETAS -->
 <body>
@@ -72,12 +71,6 @@
 
                     <div class="time-display" id="display-<?php echo $index; ?>">00:00:00:000</div>
 
-                    <div class="form-group">
-                <br>
-            <label for="backgroundColor" style="color: white">Color de fondo:</label>
-            <input type="color" style="background: rgba(20, 20, 20, 0.6);" class="form-control background-color-input" data-index="<?php echo $index; ?> style="background: rgba(20, 20, 20, 0.6);"">
-        </div>
-
                     <div class="text-center mt-3">
                         <button class="btn btn-primary start-btn" data-index="<?php echo $index; ?>">Iniciar</button>
                         <button class="btn btn-danger reset-btn" data-index="<?php echo $index; ?>">Reiniciar</button>
@@ -87,8 +80,8 @@
         <?php endforeach; ?>
         </div>
 
-          <!-- Modal para la gestión de notificaciones -->
-          <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <!-- Modal para la gestión de notificaciones -->
+        <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -115,15 +108,8 @@
         </div>
     </div>
 
-<script>
 
-    // Botón salir
-    $('#exit-button').click(function() {
-        localStorage.clear();
-        window.location.href = "<?php echo site_url('CronometroController/cronometro_form'); ?>";
-    });
-
-
+    <script>
     // Abrir modal de notificaciones
     $(document).on('click', '.notification-btn', function() {
         let index = $(this).data('index');
@@ -131,9 +117,8 @@
         $('#notificationModal').modal('show');
     });
 
-    
-     // Guardar la notificación en la base de datos
-     $('#saveNotification').click(function() {
+    // Guardar la notificación en la base de datos
+    $('#saveNotification').click(function() {
         let message = $('#notificationMessage').val();
         let index = $('#notificationIndex').val();
         
@@ -154,7 +139,6 @@
             }
         });
     });
-    
 </script>
-
 </body>
+</html>
