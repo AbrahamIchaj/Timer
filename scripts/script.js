@@ -249,44 +249,48 @@ $('#cantidad-tarjetas').text(cantidadTarjetas);
     }
 
     // Crear una nueva tarjeta
-        function crearTarjetaHTML(index, nombre, tipo) {
-    var isTemporizador = tipo === 'temporizador' ? 'block' : 'none';
-    return `
-    <div class="col-md-4 mb-4 card-container" data-index="${index}">
-        <div class="card shadow-sm">
-            <div class="d-flex justify-content-between mb-3">
-                <button class="delete-button" title="Eliminar tarjeta">X</button>
-                <button class="edit-button" title="Editar tarjeta">✎</button>
-            </div>
-            <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[${index}][nombre]" value="${nombre}" disabled/>
-            <div class="form-group">
-                <label for="tipo" style="color: white">Seleccionar:</label>
-                <select name="tarjetas[${index}][tipo]" class="form-control tipo-select">
-                    <option value="cronometro" ${tipo === 'cronometro' ? 'selected' : ''}>Cronómetro</option>
-                    <option value="temporizador" ${tipo === 'temporizador' ? 'selected' : ''}>Temporizador</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <div class="time-inputs mt-3 mb-3" style="display: ${isTemporizador};">
-                    <input type="number" class="form-control d-inline-block hours-input input-w" placeholder="Horas" min="0" max="23">
-                    <input type="number" class="form-control d-inline-block minutes-input input-w" placeholder="Minutos" min="0" max="59">
-                    <input type="number" class="form-control d-inline-block seconds-input input-w" placeholder="Segundos" min="0" max="59">
+    function crearTarjetaHTML(index, nombre, tipo) {
+        var isTemporizador = tipo === 'temporizador' ? 'block' : 'none';
+        return `
+        <div class="col-md-4 mb-4 card-container" data-index="${index}">
+            <div class="card shadow-sm">
+                <div class="d-flex justify-content-between mb-3">
+                    <button class="delete-button" title="Eliminar tarjeta">X</button>
+                    <button class="edit-button" title="Editar tarjeta">✎</button>
                 </div>
-                <p class="time-display" id="display-${index}">00:00:00:000</p>
-                <div class="text-center mt-3">
-                         <button class="btn btn-primary start-btn" data-index="${index}">Iniciar</button>
+                <input type="text" class="form-control mb-3 tarjeta-nombre" name="tarjetas[${index}][nombre]" value="${nombre}" disabled/>
+                           
+                <div class="form-group">
+                    <label for="tipo" style="color: white">Seleccionar:</label>
+                    <select name="tarjetas[${index}][tipo]" class="form-control tipo-select">
+                        <option value="cronometro" ${tipo === 'cronometro' ? 'selected' : ''}>Cronómetro</option>
+                        <option value="temporizador" ${tipo === 'temporizador' ? 'selected' : ''}>Temporizador</option>
+                    </select>
+                </div>
+ <!-- Aquí agrego el botón de notificaciones -->
+                    <button class="btn btn-secondary notification-btn" data-index="<?php echo $index; ?>">Notificaciones</button>
+
+                <div class="form-group">
+                    <div class="time-inputs mt-3 mb-3" style="display: ${isTemporizador};">
+                        <input type="number" class="form-control d-inline-block hours-input input-w" placeholder="Horas" min="0" max="23">
+                        <input type="number" class="form-control d-inline-block minutes-input input-w" placeholder="Minutos" min="0" max="59">
+                        <input type="number" class="form-control d-inline-block seconds-input input-w" placeholder="Segundos" min="0" max="59">
+                    </div>
+                    <p class="time-display" id="display-${index}">00:00:00:000</p>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-primary start-btn" data-index="${index}">Iniciar</button>
                         <button class="btn btn-danger reset-btn" data-index="${index}">Reiniciar</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <br>
+                    <label for="backgroundColor" style="color: white">Color de fondo:</label>
+                    <input type="color" class="form-control background-color-input" data-index="${index}" style="background: rgba(20, 20, 20, 0.6);">
                 </div>
             </div>
-            <div class="form-group">
-                <br>
-            <label for="backgroundColor" style="color: white">Color de fondo:</label>
-            <input type="color" style="background: rgba(20, 20, 20, 0.6);" class="form-control background-color-input" data-index="<?php echo $index; ?> style="background: rgba(20, 20, 20, 0.6);"">
         </div>
-        </div>
-    </div>
-`;
-}
+        `;
+    }
 
     // Guardar cambios al agregar tarjeta
     $(document).on('click', '#add-card', function() {

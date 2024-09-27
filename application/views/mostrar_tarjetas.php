@@ -87,8 +87,8 @@
         <?php endforeach; ?>
         </div>
 
-         <!-- Modal para la gestión de notificaciones -->
-         <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+          <!-- Modal para la gestión de notificaciones -->
+          <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -124,12 +124,35 @@
     });
 
 
-   
     // Abrir modal de notificaciones
     $(document).on('click', '.notification-btn', function() {
         let index = $(this).data('index');
         $('#notificationIndex').val(index);
         $('#notificationModal').modal('show');
+    });
+
+    
+     // Guardar la notificación en la base de datos
+     $('#saveNotification').click(function() {
+        let message = $('#notificationMessage').val();
+        let index = $('#notificationIndex').val();
+        
+        // Guardar en la base de datos usando AJAX
+        $.ajax({
+            url: "<?php echo site_url('NotificacionController/guardar_notificacion'); ?>",
+            type: 'POST',
+            data: {
+                tarjeta_id: index,
+                mensaje: message
+            },
+            success: function(response) {
+                alert('Notificación guardada con éxito');
+                $('#notificationModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+                alert('Error al guardar la notificación: ' + error);
+            }
+        });
     });
     
 </script>
