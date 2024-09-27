@@ -6,4 +6,5 @@ class NotificacionController extends CI_Controller {
         $this->load->model('NotificacionModel');
     } 
 
+
 }
